@@ -2,7 +2,7 @@ install.packages(patentsview)
 library(patentsview)
 library(tidyr)
 
-query_us <- qry_funs$and(qry_funs$eq(patent_year = 2019),
+query_us <- qry_funs$and(qry_funs$eq(patent_year = c(2010, 2011, 2012, 2013, 2014, 2015, 2016)),
                          qry_funs$eq(assignee_country = "US"))
 query_us <- '{"_and": [{"patent_year": 2019}, {"assignee_country": "US"}]}'
 # Specifying the fields of interest. In this step we indicate which
