@@ -3,29 +3,46 @@ library(tidyr)
 library(dplyr)
 library(igraph)
 
-sdc_data <- readRDS('data/SDC_data_2021.rds')
-
-us_alliances <- sdc_data %>% filter(status == "Completed/Signed",
-                                    date_terminated == "",
-                                    type == "Strategic Alliance",
-                                    date_announced > "2012-01-01",
-                                    date_announced < "2016-12-31",
-                                    participant_nation == "United States") %>%
+# SDC data
+sdc_data <- readRDS('data/smartphone_SDC_2010_2016.rds') %>%
   select(participants, date_announced, type, SIC_primary,
          participant_nation, deal_number)
 
-us_alliances_net <- us_alliances %>%
+
+# Plot
+sdc_net <- sdc_data %>%
   select(participants, deal_number) %>%
   as.matrix()
-us_alliances_graph <- graph.data.frame(us_alliances_net, directed = FALSE)
-V(us_alliances_graph)$type <- ifelse(V(us_alliances_graph)$name %in%
-                                       us_alliances_net[,2],
+
+sdc_graph <- graph.data.frame(sdc_net, directed = FALSE)
+V(sdc_graph)$type <- ifelse(V(sdc_graph)$name %in%
+                                       sdc_net[,2],
                                      yes = TRUE, no = FALSE)
-us_alliances_graph <- bipartite.projection(us_alliances_graph)$proj1
-us_alliances_graph <- simplify(us_alliances_graph, remove.loops = TRUE,
+
+sdc_graph <- bipartite.projection(sdc_graph)$proj1
+sdc_graph <- simplify(sdc_graph, remove.loops = TRUE,
                                remove.multiple = TRUE)
 set.seed(2001525)
-coords = layout_with_lgl(us_alliances_graph)
-plot(us_alliances_graph, layout=coords, vertex.color = "coral2",
-     vertex.label=NA, vertex.size = 0.05, edge.width = 0.002,
+coords = layout_with_lgl(sdc_graph)
+plot(sdc_graph, layout=coords, vertex.color = "coral2",
+     vertex.label=NA, vertex.size = 2, edge.width = 0.002,
      edge.color = adjustcolor("black", alpha.f = 0.1))
+
+
+# Plot bipartite 
+sdc_net <- sdc_data %>% select(participants, deal_number) %>% as.matrix()
+sdc_graph <- graph.data.frame(sdc_net, directed = FALSE)
+V(sdc_graph)$type <- ifelse(V(sdc_graph)$name %in%
+                              sdc_net[,2],
+                            yes = TRUE, no = FALSE)
+sdc_graph <- simplify(sdc_graph, remove.loops = TRUE,
+                      remove.multiple = TRUE)
+set.seed(06062003)
+coords <- layout_with_kk(sdc_graph)
+vertex.type1.color <- c("red") %>% rep(length(unique(sdc_net[, 1])))
+vertex.type2.color <- c("blue") %>% rep(length(unique(sdc_net[, 2])))
+vertex.color <- c(vertex.type1.color, vertex.type2.color)
+plot(sdc_graph, layout=coords, vertex.color = vertex.color,
+     vertex.label=NA, vertex.size = 2, edge.width = 0.002,
+     edge.color = adjustcolor("black", alpha.f = 0.1))
+legend("topleft", legend=c("organization", "deal"), fill=c("red", "blue"))

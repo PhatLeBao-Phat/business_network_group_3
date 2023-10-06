@@ -49,11 +49,5 @@ sic <- names(sic_dict)
 sp_data <- sdc_data[sdc_data$SIC_primary %in% sic,]
 print(length(unique(sp_data$participants)))
 
-# PatentView data
-fields <- c("assignee_id", "assignee_organization", "forprior_country", 
-               "assignee_total_num_patents", "app_country", "patent_date")
-query <- qry_funs$eq(patent_year = 2011)
-search <- search_pv(query = query, fields = fields,
-                            all_pages = TRUE,
-                            sort = c("assignee_organization" = "asc")) 
-patent_data <- search$data$patents %>% unnest(c(assignees, applications, ))
+# Save the dataset 
+saveRDS(sp_data, file="data/smartphone_SDC_2010_2016.rds")
