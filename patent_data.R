@@ -8,7 +8,7 @@ query_us <- '{"_and": [{"patent_year": 2019}, {"assignee_country": "US"}]}'
 # Specifying the fields of interest. In this step we indicate which
 # variables do we want to obtain. A full list of possible fields is available
 # via the following R command: View(patentsview::fieldsdf)
-fields_us <- c("assignee_id", "assignee_organization",
+fields_us <- c("assignee_id", "assignee_organization", "forprior_country",
                "assignee_total_num_patents", "app_country", "patent_date")
 # Sending our request to the database. This returns a complex file consisting of
 # many lists

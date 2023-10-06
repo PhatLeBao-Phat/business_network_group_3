@@ -6,6 +6,7 @@ library(readxl)
 library(dplyr)
 library(igraph)
 library(stringdist)
+library(patentsview)
 
 # Read data 
 sdc_data <- readRDS('data/SDC_data_2021.rds')
@@ -49,13 +50,10 @@ sp_data <- sdc_data[sdc_data$SIC_primary %in% sic,]
 print(length(unique(sp_data$participants)))
 
 # PatentView data
-fields <- c("assignee_id", "assignee_organization",
+fields <- c("assignee_id", "assignee_organization", "forprior_country", 
                "assignee_total_num_patents", "app_country", "patent_date")
-query <- qry_funs$eq(patent_year = c(2021, 2022))
+query <- qry_funs$eq(patent_year = 2011)
 search <- search_pv(query = query, fields = fields,
                             all_pages = TRUE,
                             sort = c("assignee_organization" = "asc")) 
-patent_data <- search$data$patents %>% unnest(assignees) %>%
-  distinct(assignee_key_id, .keep_all = T) %>%
-  select(-applications) %>%
-  filter(!is.na(assignee_organization))
+patent_data <- search$data$patents %>% unnest(c(assignees, applications, ))
