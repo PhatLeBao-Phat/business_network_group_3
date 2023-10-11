@@ -19,7 +19,7 @@ V(sdc_graph)$type <- ifelse(V(sdc_graph)$name %in%
                                        sdc_net[,2],
                                      yes = TRUE, no = FALSE)
 
-sdc_graph <- bipartite.projection(sdc_graph)$proj1
+# sdc_graph <- bipartite.projection(sdc_graph)$proj1
 sdc_graph <- simplify(sdc_graph, remove.loops = TRUE,
                                remove.multiple = TRUE)
 set.seed(2001525)
@@ -44,5 +44,5 @@ vertex.type2.color <- c("blue") %>% rep(length(unique(sdc_net[, 2])))
 vertex.color <- c(vertex.type1.color, vertex.type2.color)
 plot(sdc_graph, layout=coords, vertex.color = vertex.color,
      vertex.label=NA, vertex.size = 2, edge.width = 0.002,
-     edge.color = adjustcolor("black", alpha.f = 0.1))
+     edge.color = "black")
 legend("topleft", legend=c("organization", "deal"), fill=c("red", "blue"))
