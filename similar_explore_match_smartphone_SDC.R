@@ -23,7 +23,7 @@ matched_smartphone_graph <- bipartite.projection(matched_smartphone_graph)$proj1
 matched_smartphone_graph <- simplify(matched_smartphone_graph, remove.loops = TRUE,
                                remove.multiple = TRUE)
 set.seed(2001525)
-coords = layout_with_lgl(sdc_graph)
+coords = layout_with_lgl(matched_smartphone_graph)
 plot(matched_smartphone_graph, layout=coords, vertex.color = "coral2",
      vertex.label=NA, vertex.size = 2, edge.width = 0.002,
      edge.color = adjustcolor("black", alpha.f = 0.1))
@@ -35,7 +35,7 @@ matched_smartphone_graph <- graph.data.frame(matched_smartphone_net, directed = 
 V(matched_smartphone_graph)$type <- ifelse(V(matched_smartphone_graph)$name %in%
                               matched_smartphone_net[,2],
                             yes = TRUE, no = FALSE)
-sdc_graph <- simplify(matched_smartphone_graph, remove.loops = TRUE,
+matched_smartphone_graph <- simplify(matched_smartphone_graph, remove.loops = TRUE,
                       remove.multiple = TRUE)
 set.seed(06062003)
 coords <- layout_with_kk(sdc_graph)
