@@ -1,4 +1,4 @@
-# Import dataset SDC
+# EXTRACT SDC dataset
 # install.packages("stringdist")
 # install.packages("readxl")
 library(tidyr)
